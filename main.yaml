@@ -1,5 +1,10 @@
  - hosts: localhost
    become: false
+   pre_tasks:
+     - name: Update brew
+       shell: brew update
+       tags:
+       - brew
    tasks:
    - name: Create hushlogin
      ansible.builtin.copy:
@@ -7,21 +12,34 @@
        content: "" 
    - name: Install git
      shell: brew install git    
+     tags:
+     - zsh
+     - brew
    - name: Install oh-my-zsh
      shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
      ignore_errors: true
+     tags:
+     - zsh
    - name: Install the zsh plugin autosuggestions
      ansible.builtin.git:
        repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
        dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
+     tags:
+     - zsh
    - name: Update our zshrc
      ansible.builtin.replace: 
        path: ~/.zshrc
        regexp: '\(git\)'
        replace: '(git zsh-autosuggestions)'
        after: 'plugins'  
+     tags:
+     - zsh
    - name: Install Scala
      shell: brew install coursier/formulas/coursier && cs setup
+     tags:
+     - brew
    - name: Install additional brew packages
      shell: brew install signal nvim redis openjdk@11
+     tags:
+     - brew
 
