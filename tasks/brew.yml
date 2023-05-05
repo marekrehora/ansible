@@ -1,0 +1,8 @@
+- name: Install Scala
+  shell: brew install coursier/formulas/coursier && cs setup
+  tags:
+  - brew
+- name: Install additional brew packages
+  shell: brew install signal nvim redis openjdk@11
+  tags:
+  - brew

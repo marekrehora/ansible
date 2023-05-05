@@ -1,0 +1,23 @@
+- hosts: localhost
+  become: false
+  pre_tasks:
+    - name: Update brew
+      shell: brew update
+      tags:
+      - brew
+    - name: Install git
+      shell: brew install git    
+      tags:
+      - zsh
+      - brew
+    - name: Create hushlogin
+      ansible.builtin.copy:
+        dest: ~/.hushlogin
+        content: ""
+        tags:
+        - zsh
+        - brew
+  tasks:
+    - include: tasks/zsh.yml
+    - include: tasks/brew.yml
+
