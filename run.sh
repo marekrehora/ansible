@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
 ### Install Homebrew
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+#/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 ### Install ansible
-brew install ansible
+#brew install ansible
 
+echo ${GITHUB_TOKEN}
 ### Pull ansible
-ansible-pull -U https://github.com/marekrehora/ansible.git
+ansible-pull -U https://${GITHUB_TOKEN}:x-oauth-basic@github.com/marekrehora/ansible.git
+
