@@ -1,0 +1,18 @@
+ - hosts: localhost
+   become: false
+   tasks:
+   - name: Install git
+     shell: brew install git
+   - name: Install oh-my-zsh
+     shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+     ignore_errors: true
+   - name: Install the zsh plugin autosuggestions
+     ansible.builtin.git:
+       repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
+       dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
+   - name: Update our zshrc
+     ansible.builtin.replace: 
+       path: ~/.zshrc
+       regexp: '\(git\)'
+       replace: '(git zsh-autosuggestions)'
+       after: 'plugins'  
