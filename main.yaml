@@ -1,8 +1,12 @@
  - hosts: localhost
    become: false
    tasks:
+   - name: Create hushlogin
+     ansible.builtin.copy:
+       dest: ~/.hushlogin
+       content: "" 
    - name: Install git
-     shell: brew install git
+     shell: brew install git    
    - name: Install oh-my-zsh
      shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
      ignore_errors: true
@@ -16,3 +20,8 @@
        regexp: '\(git\)'
        replace: '(git zsh-autosuggestions)'
        after: 'plugins'  
+   - name: Install Scala
+     shell: brew install coursier/formulas/coursier && cs setup
+   - name: Install additional brew packages
+     shell: brew install signal nvim redis openjdk@11
+
