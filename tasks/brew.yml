@@ -3,6 +3,6 @@
   tags:
   - brew
 - name: Install additional brew packages
-  shell: brew install signal nvim redis openjdk@11
+  shell: brew install signal nvim redis openjdk@11 nvm
   tags:
   - brew
