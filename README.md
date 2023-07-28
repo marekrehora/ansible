@@ -22,4 +22,4 @@ https://artifactory.eng.medallia.com/ui/admin/artifactory/user_profile
 `docker login virtual-docker.artifactory.eng.medallia.com`
 
 # Fonts
-https://github.com/tonsky/FiraCode
+https://www.nerdfonts.com/font-downloads
