@@ -3,6 +3,10 @@
   tags:
   - brew
 - name: Install additional brew packages
-  shell: brew install signal nvim redis openjdk@11 nvm
+  shell: brew install signal nvim fd iterm2 ripgrep jesseduffield/lazygit/lazygit
+  tags:
+  - brew
+- name: Install additional brew casks
+  shell: brew install --cask iterm2
   tags:
   - brew
