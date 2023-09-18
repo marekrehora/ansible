@@ -26,6 +26,9 @@ lvim.builtin.dap.active = true
 
 lvim.keys.normal_mode["grn"] = vim.lsp.buf.rename
 
+lvim.keys.normal_mode["|"] = ":vsplit<CR>"
+lvim.keys.normal_mode["-"] = ":split<CR>"
+
 -- Trouble keybinds
 lvim.keys.normal_mode["<leader>xx"] = function() require("trouble").open() end
 lvim.keys.normal_mode["<leader>xw"] = function() require("trouble").open("workspace_diagnostics") end
@@ -56,58 +59,74 @@ lvim.plugins = {
     cmd = "TroubleToggle",
   },
   {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    ---@type Flash.Config
+    opts = {},
+    -- stylua: ignore
+    keys = {
+      { "s", mode = { "n", "o", "x" }, function() require("flash").jump() end,       desc = "Flash" },
+      { "S", mode = { "n", "o", "x" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "r", mode = "o",               function() require("flash").remote() end,     desc = "Remote Flash" },
+      {
+        "R",
+        mode = { "o", "x" },
+        function() require("flash").treesitter_search() end,
+        desc =
+        "Treesitter Search"
+      },
+      {
+        "<c-s>",
+        mode = { "c" },
+        function() require("flash").toggle() end,
+        desc =
+        "Toggle Flash Search"
+      },
+    },
+  },
+  {
     "romgrk/nvim-treesitter-context",
     config = function()
       require("treesitter-context").setup {
-        enable = true,   -- Enable this plugin (Can be enabled/disabled later via commands)
-        throttle = true, -- Throttles plugin updates (may improve performance)
-        max_lines = 0,   -- How many lines the window should span. Values <= 0 mean no limit.
-        patterns = {     -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
+        enable = true,            -- Enable this plugin (Can be enabled/disabled later via commands)
+        max_lines = 0,            -- How many lines the window should span. Values <= 0 mean no limit.
+        min_window_height = 0,    -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+        line_numbers = true,
+        multiline_threshold = 20, -- Maximum number of lines to show for a single context
+        trim_scope = 'outer',     -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+        mode = 'cursor',          -- Line used to calculate context. Choices: 'cursor', 'topline'
+        -- Separator between context and content. Should be a single character string, like '-'.
+        -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+        separator = '-',
+        zindex = 20, -- The Z-index of the context window
+        patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
           -- For all filetypes
           -- Note that setting an entry here replaces all other patterns for this entry.
           -- By setting the 'default' entry below, you can control which nodes you want to
           -- appear in the context window.
           default = {
-            'class',
-            'function',
-            'method',
-            'object',
-            'case',
-            'for'
+            'function_definition',
+            'class_definition',
+            'object_definition',
+            'enum_definition',
+            'case_clause',
+            'match_expression',
+            'call_expression',
+            'if_expression',
+            'val_definition',
+            'var_definition',
+            'while_expression',
+            'do_while_expression',
+            'for_expression',
+            'try_expression',
           },
         },
       }
     end
   },
-  -- {
-  --   'codota/tabnine-nvim',
-  --   build = "./dl_binaries.sh",
-  --   config = function()
-  --     require("tabnine").setup({
-  --       disable_auto_comment = true,
-  --       accept_keymap = "<C-Enter>",
-  --       dismiss_keymap = "<C-]>",
-  --       debounce_ms = 800,
-  --       suggestion_color = { gui = "#808080", cterm = 244 },
-  --       exclude_filetypes = { "TelescopePrompt" },
-  --       log_file_path = nil, -- absolute path to Tabnine log file
-  --     })
-  --     require('tabnine.status').status()
-  --   end
-  -- },
-  -- {
-  --   "Pocco81/auto-save.nvim",
-  --   config = function()
-  --     require("auto-save").setup()
-  --   end,
-  -- },
-  -- {
-  -- "hrsh7th/cmp-copilot",
-  -- config = function()
-  -- lvim.builtin.cmp.formatting.source_names["copilot"] = "( )"
-  -- table.insert(lvim.builtin.cmp.sources, 2, { name = "copilot" })
-  -- end,
-  -- },
+  {
+    "wakatime/vim-wakatime"
+  },
   {
     "zbirenbaum/copilot-cmp",
     event = "InsertEnter",
@@ -124,14 +143,6 @@ lvim.plugins = {
   --   event = "InsertEnter",
   --   config = function()
   --     require("copilot").setup({})
-  --   end,
-  -- },
-  -- {
-  --   "f-person/git-blame.nvim",
-  --   event = "BufRead",
-  --   config = function()
-  --     vim.cmd "highlight default link gitblame SpecialComment"
-  --     vim.g.gitblame_enabled = 0
   --   end,
   -- },
   {
